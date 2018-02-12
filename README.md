@@ -1,4 +1,4 @@
-# Eighty::One
+# EightyOne
 
 A game engine of Shogi.
 
