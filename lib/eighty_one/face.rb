@@ -4,7 +4,7 @@ module EightyOne
 
     def initialize(symbol, movements)
       @symbol = symbol
-      @movement = movements
+      @movements = movements
     end
   end
 
@@ -17,11 +17,11 @@ module EightyOne
     KA = Face.new(:KA, (1..8).map{|i| [[-i, i], [i, i], [-i, -i], [i, -i]] }.flatten(1))
     HI = Face.new(:HI, (1..8).map{|i| [[0, i], [0, -i], [-i, 0], [i, 0]] }.flatten(1))
     OU = Face.new(:OU, [[-1, 1], [0, 1], [1, 1], [-1, 0], [1, 0], [-1, -1], [0, -1], [1, -1]])
-    TO = Face.new(:TO, KI.movement)
-    NY = Face.new(:NY, KI.movement)
-    NK = Face.new(:NK, KI.movement)
-    NG = Face.new(:NG, KI.movement)
-    UM = Face.new(:UM, KA.movement + [[0, 1], [-1, 0], [1, 0], [0, -1]])
-    RY = Face.new(:RY, HI.movement + [[-1, 1], [1, 1], [-1, -1], [1, -1]])
+    TO = Face.new(:TO, KI.movements)
+    NY = Face.new(:NY, KI.movements)
+    NK = Face.new(:NK, KI.movements)
+    NG = Face.new(:NG, KI.movements)
+    UM = Face.new(:UM, KA.movements + [[0, 1], [-1, 0], [1, 0], [0, -1]])
+    RY = Face.new(:RY, HI.movements + [[-1, 1], [1, 1], [-1, -1], [1, -1]])
   end
 end

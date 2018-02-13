@@ -1,11 +1,11 @@
 
 lib = File.expand_path("../lib", __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require "eighty/one/version"
+require "eighty_one/version"
 
 Gem::Specification.new do |spec|
   spec.name          = "eighty-one"
-  spec.version       = Eighty::One::VERSION
+  spec.version       = EightyOne::VERSION
   spec.authors       = ["youchan"]
   spec.email         = ["youchan01@gmail.com"]
 
@@ -23,4 +23,5 @@ Gem::Specification.new do |spec|
 
   spec.add_development_dependency "bundler", "~> 1.16"
   spec.add_development_dependency "rake", "~> 10.0"
+  spec.add_development_dependency "test-unit"
 end
