@@ -1,10 +1,10 @@
 module EightyOne
   class Face
-    attr_reader :symbol, :movement
+    attr_reader :symbol, :movements
 
-    def initialize(symbol, movement)
+    def initialize(symbol, movements)
       @symbol = symbol
-      @movement = movement
+      @movement = movements
     end
   end
 

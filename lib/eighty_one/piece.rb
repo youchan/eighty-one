@@ -16,20 +16,28 @@ module EightyOne
     def initialize(turn)
       assert(turn == :sente || turn == :gote)
       @turn = turn
-      @is_forward = true
+      @promoted = false
     end
 
     def face
-      @is_forward ? forward : backward
+      @promoted ? backward : forward
     end
 
     def reset(turn)
       @turn = turn
-      @is_forward = true
+      @promote = false
     end
 
     def promote
-      @is_forward = false
+      @promoted = true
+    end
+
+    def promoted?
+      @promoted
+    end
+
+    def forward?
+      !@promoted
     end
 
     def to_s
