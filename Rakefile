@@ -1,2 +1,8 @@
 require "bundler/gem_tasks"
-task :default => :spec
+
+desc "Run tests"
+task :test do
+  ruby("test/run_test.rb")
+end
+
+task default: :test
