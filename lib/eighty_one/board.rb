@@ -45,13 +45,15 @@ module EightyOne
 
     def []=(row, col, value)
       assert(inside?(row, col))
-      assert(Piece === value)
+      assert(value.nil? || Piece === value)
       @board[(row - 1) * 9 + col - 1] = value
     end
 
     def [](row, col)
       @board[(row - 1) * 9 + col - 1]
     end
+
+    alias :at :[]
 
     def row(row)
       @board[(row - 1) * 9, 9]
@@ -63,10 +65,38 @@ module EightyOne
       piece.face.movements.select{|m| placeable?(m, row + m[0], col + m[1]) }
     end
 
+    def move_from(row, col)
+      Transition.new(self, row, col)
+    end
+
+    def place(piece, row, col)
+      dest = self.at(row, col)
+      if dest
+        dest.reset(piece.turn)
+      end
+      self[row, col] = piece
+    end
+
     def to_s
       (1..9).map do |i|
         "P#{i}" + row(i).map{|c| c ? c.to_s : ' * '}.join
       end.join(?\n)
+    end
+
+    class Transition
+      include Helper
+
+      def initialize(board, row, col)
+        @from = [row, col]
+        @board = board
+        @piece = board.at(row, col)
+        assert(Piece === @piece)
+      end
+
+      def to(row, col)
+        @board[*@from] = nil
+        @board.place(@piece, row, col)
+      end
     end
   end
 end
