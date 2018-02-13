@@ -35,8 +35,16 @@ module EightyOne
       self[1, 5] = Pieces::Ou.new(:gote)
     end
 
+    def inside?(row, col)
+      1 <= row && 9 >= row && 1 <= col && 9 >= col
+    end
+
+    def placeable?(piece, row, col)
+      inside?(row, col) && !(self[row, col]&.turn != piece.turn)
+    end
+
     def []=(row, col, value)
-      assert(1 <= row, 9 >= row, 1 <= col, 9 >= col)
+      assert(inside?(row, col))
       assert(Piece === value)
       @board[(row - 1) * 9 + col - 1] = value
     end
@@ -47,6 +55,12 @@ module EightyOne
 
     def row(row)
       @board[(row - 1) * 9, 9]
+    end
+
+    def dests_from(row, col)
+      piece = self.at(row, col)
+      assert(Piece === piece)
+      piece.face.movements.select{|m| placeable?(m, row + m[0], col + m[1]) }
     end
 
     def to_s
