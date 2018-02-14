@@ -66,7 +66,7 @@ module EightyOne
     end
 
     def move_from(col, row)
-      Transition.new(self, col, row)
+      Movement.new(self, col, row)
     end
 
     def place(piece, col, row)
@@ -85,7 +85,7 @@ module EightyOne
       end.join(?\n)
     end
 
-    class Transition
+    class Movement
       include Helper
 
       def initialize(board, col, row)
