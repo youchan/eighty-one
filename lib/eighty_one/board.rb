@@ -72,6 +72,8 @@ module EightyOne
     def place(piece, col, row)
       dest = self.at(col, row)
       if dest
+        assert(Piece === dest)
+        assert(dest.turn != piece.turn)
         dest.reset(piece.turn)
       end
       self[col, row] = piece

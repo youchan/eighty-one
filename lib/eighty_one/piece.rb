@@ -40,6 +40,10 @@ module EightyOne
       !@promoted
     end
 
+    def opposite
+      @turn == :sente ? :gote : :sente
+    end
+
     def to_s
       (@turn == :sente ? ?+ : ?-) + face.symbol.to_s
     end
