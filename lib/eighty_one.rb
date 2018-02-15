@@ -1,6 +1,7 @@
 require "eighty_one/version"
 
 module EightyOne
+  class CantGetMovement < RuntimeError; end
   module Helper
     def assert(*conds)
       unless conds.all?

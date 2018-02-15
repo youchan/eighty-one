@@ -41,7 +41,15 @@ module EightyOne
     end
 
     def opposite
-      @turn == :sente ? :gote : :sente
+      @turn.sente? ? :gote : :sente
+    end
+
+    def sente?
+      @turn == :sente
+    end
+
+    def gote?
+      @turn == :gote
     end
 
     def to_s

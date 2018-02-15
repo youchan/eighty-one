@@ -9,13 +9,31 @@ module EightyOne
   end
 
   module Faces
-    FU = Face.new(:FU, [0, 1])
-    KY = Face.new(:KY, (1..8).map{|i| [0, i] })
+    class Direction
+      attr_reader :dir
+
+      def initialize(col, row)
+        @dir = [col, row]
+      end
+
+      def toward_while(&block)
+        8.times do |i|
+          break unless block.call [@dir[0] * i, @dir[1] * i]
+        end
+      end
+    end
+
+    def self.dir(col, row)
+      Direction.new(col, row)
+    end
+
+    FU = Face.new(:FU, [[0, 1]])
+    KY = Face.new(:KY, [dir(0, 1)])
     KE = Face.new(:KE, [[-1, 2], [1, 2]])
     GI = Face.new(:GI, [[-1, 1], [0, 1], [1, 1], [-1, -1], [1, -1]])
     KI = Face.new(:KI, [[-1, 1], [0, 1], [1, 1], [-1, 0], [-1, 0], [0, -1]])
-    KA = Face.new(:KA, (1..8).map{|i| [[-i, i], [i, i], [-i, -i], [i, -i]] }.flatten(1))
-    HI = Face.new(:HI, (1..8).map{|i| [[0, i], [0, -i], [-i, 0], [i, 0]] }.flatten(1))
+    KA = Face.new(:KA, [dir(-1, 1), dir(1, 1), dir(-1, -1), dir(1, -1)])
+    HI = Face.new(:HI, [dir(0, 1), dir(0, -1), dir(-1, 0), dir(1, 0)])
     OU = Face.new(:OU, [[-1, 1], [0, 1], [1, 1], [-1, 0], [1, 0], [-1, -1], [0, -1], [1, -1]])
     TO = Face.new(:TO, KI.movements)
     NY = Face.new(:NY, KI.movements)

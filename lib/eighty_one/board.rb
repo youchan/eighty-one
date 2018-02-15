@@ -39,8 +39,18 @@ module EightyOne
       1 <= row && 9 >= row && 1 <= col && 9 >= col
     end
 
-    def placeable?(piece, col, row)
-      inside?(col, row) && !(self[col, row]&.turn != piece.turn)
+    def double_fu?(piece, col, row)
+      piece.face.symbol == :FU && (1..9).any?{|i| self[i, row]&.yield_self{|p| p.face.symbol == :FU && p.turn == piece.turn } }
+    end
+
+    def can_move_to_any_place?(piece, col, row)
+      !([:FU, :KY].include?(piece.face.symbol) && (piece.sente? ? col == 1 : col == 9))
+    end
+
+    def placeable?(piece, col, row, from_hand = false)
+      res = inside?(col, row) && !(self[col, row]&.turn == piece.turn)
+      res &&= can_move_to_any_place?(piece, col, row) && !double_fu?(piece, col, row) if from_hand
+      res
     end
 
     def []=(col, row, value)
@@ -62,7 +72,16 @@ module EightyOne
     def dests_from(col, row)
       piece = self.at(col, row)
       assert(Piece === piece)
-      piece.face.movements.select{|m| placeable?(m, col + m[0], row + m[1]) }
+      dest = Proc.new{|(c, r)| [col + c, row + r] }
+      piece.face.movements.map do |m|
+        if EightyOne::Faces::Direction === m
+          m.toward_while do |p|
+            dest[p].yield_self{|p| placeable?(piece, *p) && self.at(*p).nil? }
+          end
+        else
+          dest[m].yield_self{|p| placeable?(piece, *p) ? [p] : [] }
+        end
+      end.flatten(1)
     end
 
     def move_from(col, row)
@@ -96,8 +115,12 @@ module EightyOne
       end
 
       def to(col, row)
-        @board[*@from] = nil
-        @board.place(@piece, col, row)
+        if @board.dests_from(*@from).include?([col, row])
+          @board[*@from] = nil
+          @board.place(@piece, col, row)
+        else
+          raise CantGetMovement.new
+        end
       end
     end
   end
