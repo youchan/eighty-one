@@ -100,12 +100,16 @@ module EightyOne
       Movement.new(self, col, row)
     end
 
+    def capture(piece)
+      @hands[piece.turn] << piece
+    end
+
     def place(piece, col, row)
       dest = self.at(col, row)
       if dest
         assert(Piece === dest)
         assert(dest.turn != piece.turn)
-        @hands[piece.turn] << dest.reset(piece.turn)
+        capture(dest.reset(piece.turn))
       end
       self[col, row] = piece
     end
