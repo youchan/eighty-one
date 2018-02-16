@@ -26,6 +26,7 @@ module EightyOne
     def reset(turn)
       @turn = turn
       @promote = false
+      self
     end
 
     def promote

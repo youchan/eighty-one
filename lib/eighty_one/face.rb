@@ -10,15 +10,17 @@ module EightyOne
 
   module Faces
     class Direction
+      include Enumerable
+
       attr_reader :dir
 
       def initialize(col, row)
         @dir = [col, row]
       end
 
-      def toward_while(&block)
-        8.times do |i|
-          break unless block.call [@dir[0] * i, @dir[1] * i]
+      def each
+        (1..8).each do |i|
+          yield [@dir[0] * i, @dir[1] * i]
         end
       end
     end

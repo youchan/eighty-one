@@ -4,6 +4,7 @@ module EightyOne
 
     def initialize
       @board = Array.new(81)
+      @hands = Struct.new(:sente, :gote).new([], [])
     end
 
     def initial_state
@@ -63,6 +64,14 @@ module EightyOne
       @board[(row - 1) * 9 + col - 1]
     end
 
+    def sente_hands
+      @hands.sente
+    end
+
+    def gote_hands
+      @hands.gote
+    end
+
     alias :at :[]
 
     def row(row)
@@ -72,11 +81,14 @@ module EightyOne
     def dests_from(col, row)
       piece = self.at(col, row)
       assert(Piece === piece)
-      dest = Proc.new{|(c, r)| [col + c, row + r] }
+      dest = Proc.new{|(c, r)| [col + c, piece.sente? ? row - r : row + r] }
       piece.face.movements.map do |m|
         if EightyOne::Faces::Direction === m
-          m.toward_while do |p|
-            dest[p].yield_self{|p| placeable?(piece, *p) && self.at(*p).nil? }
+          captured = false
+          m.map{|p| dest[p] }.take_while do |p|
+            (!captured && placeable?(piece, *p)).tap do |x|
+              captured = x && self.at(*p)
+            end
           end
         else
           dest[m].yield_self{|p| placeable?(piece, *p) ? [p] : [] }
@@ -93,7 +105,7 @@ module EightyOne
       if dest
         assert(Piece === dest)
         assert(dest.turn != piece.turn)
-        dest.reset(piece.turn)
+        @hands[piece.turn] << dest.reset(piece.turn)
       end
       self[col, row] = piece
     end

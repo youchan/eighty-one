@@ -24,7 +24,14 @@ class EightyOne::BoardTest < Test::Unit::TestCase
 
     assert_raise(EightyOne::CantGetMovement) do
       @board.move_from(1,9).to(1,6)
-      puts @board.to_s
     end
+  end
+
+  def test_capturing
+    @board[1,9] = EightyOne::Pieces::Ky.new(:sente)
+    @board[1,7] = EightyOne::Pieces::Fu.new(:gote)
+    @board.move_from(1,9).to(1,7)
+    assert_equal(:KY, @board[1,7].face.symbol)
+    assert_equal([:FU, :sente], @board.sente_hands.first.yield_self{|x| [x.face.symbol, x.turn] })
   end
 end
