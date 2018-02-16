@@ -43,5 +43,7 @@ module EightyOne
     NG = Face.new(:NG, KI.movements)
     UM = Face.new(:UM, KA.movements + [[0, 1], [-1, 0], [1, 0], [0, -1]])
     RY = Face.new(:RY, HI.movements + [[-1, 1], [1, 1], [-1, -1], [1, -1]])
+
+    ALL = [ FU, KY, KE, GI, KI, KA, HI, OU, TO, NY, NK, NG, UM, RY ]
   end
 end

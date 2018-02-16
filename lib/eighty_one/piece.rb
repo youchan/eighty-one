@@ -6,7 +6,9 @@ module EightyOne
       Class.new(self) do |c|
         c.instance_eval do
           define_method(:forward) { forward }
+          define_singleton_method(:forward) { forward }
           define_method(:backward) { backward }
+          define_singleton_method(:backward) { backward }
         end
       end
     end
@@ -31,6 +33,7 @@ module EightyOne
 
     def promote
       @promoted = true
+      self
     end
 
     def promoted?
@@ -53,8 +56,26 @@ module EightyOne
       @turn == :gote
     end
 
-    def to_s
+    def encode
       (@turn == :sente ? ?+ : ?-) + face.symbol.to_s
+    end
+
+    def to_s
+      self.encode
+    end
+
+    def self.decode(code)
+      turn = code[0] == ?+ ? :sente : :gote
+      symbol = code[1, 2].to_sym
+      piece_class = Pieces::ALL.find{|p| p.forward.symbol == symbol }
+      if piece_class
+        piece_class.new(turn)
+      else
+        piece_class = ALL.find{|p| p.backword.symbol == symbol }
+        if piece_class
+          piece_class.new(turn).promote
+        end
+      end
     end
   end
 
@@ -67,5 +88,7 @@ module EightyOne
     Ka = Piece.new_class(Faces::KA, Faces::UM)
     Hi = Piece.new_class(Faces::HI, Faces::RY)
     Ou = Piece.new_class(Faces::OU, nil)
+
+    ALL = [Fu, Ky, Ke, Gi, Ki, Ka, Hi, Ou]
   end
 end

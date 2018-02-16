@@ -34,4 +34,13 @@ class EightyOne::BoardTest < Test::Unit::TestCase
     assert_equal(:KY, @board[1,7].face.symbol)
     assert_equal([:FU, :sente], @board.sente_hands.first.yield_self{|x| [x.face.symbol, x.turn] })
   end
+
+  def test_encode_decode
+    (1..5).each do |i| @board[10 - i, i] = EightyOne::Pieces::Fu.new(:sente) end
+    (6..9).each do |i| @board[10 - i, i] = EightyOne::Pieces::Fu.new(:gote) end
+    @board.sente_hands <<  EightyOne::Pieces::Ky.new(:sente)
+    @board.gote_hands <<  EightyOne::Pieces::Ke.new(:gote)
+
+    assert_equal(@board.to_s, EightyOne::Board.decode(@board.encode).to_s)
+  end
 end
