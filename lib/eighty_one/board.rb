@@ -56,12 +56,14 @@ module EightyOne
 
     def []=(col, row, value)
       assert(inside?(col, row))
-      assert(value.nil? || Piece === value)
+      assert(value.nil? || Piece === value, "pieace must be a class Piece: #{value.class}")
       @board[(row - 1) * 9 + 9 - col] = value
     end
 
     def [](col, row)
-      @board[(row - 1) * 9 + 9 - col]
+      piece = @board[(row - 1) * 9 + 9 - col]
+      assert(piece.nil? || Piece === piece, "piece is not a class Piece: #{piece.class}")
+      piece
     end
 
     def sente_hands
@@ -78,9 +80,14 @@ module EightyOne
       @board[(row - 1) * 9, 9].reverse
     end
 
+    def each_cells(&block)
+      return @board.to_enum unless block
+      @board.each &block
+    end
+
     def dests_from(col, row)
       piece = self.at(col, row)
-      assert(Piece === piece)
+      return [] unless piece
       dest = Proc.new{|(c, r)| [col + c, piece.sente? ? row - r : row + r] }
       piece.face.movements.map do |m|
         if EightyOne::Faces::Direction === m
@@ -107,7 +114,6 @@ module EightyOne
     def place(piece, col, row)
       dest = self.at(col, row)
       if dest
-        assert(Piece === dest)
         assert(dest.turn != piece.turn)
         capture(dest.reset(piece.turn))
       end
@@ -167,7 +173,6 @@ module EightyOne
         @from = [col, row]
         @board = board
         @piece = board.at(col, row)
-        assert(Piece === @piece)
       end
 
       def to(col, row)
