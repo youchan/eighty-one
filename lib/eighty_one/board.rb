@@ -28,10 +28,10 @@ module EightyOne
         self[i, 9] = Pieces::Ki.new(:sente)
         self[i, 1] = Pieces::Ki.new(:gote)
       end
-      self[2, 8] = Pieces::Ka.new(:sente)
-      self[8, 2] = Pieces::Ka.new(:gote)
-      self[8, 8] = Pieces::Hi.new(:sente)
-      self[2, 2] = Pieces::Hi.new(:gote)
+      self[8, 8] = Pieces::Ka.new(:sente)
+      self[2, 2] = Pieces::Ka.new(:gote)
+      self[2, 8] = Pieces::Hi.new(:sente)
+      self[8, 2] = Pieces::Hi.new(:gote)
       self[5, 9] = Pieces::Ou.new(:sente)
       self[5, 1] = Pieces::Ou.new(:gote)
     end
@@ -156,14 +156,14 @@ module EightyOne
       board
     end
 
-    def to_csi
+    def to_usi
       (1..9).map do |i|
-        "P#{i}" + row(i).map{|c| c ? c.to_s : ' * '}.join
+        "P#{i}" + row(i).reverse.map{|c| c ? c.to_s : ' * '}.join
       end.join(?\n)
     end
 
     def to_s
-      self.to_csi
+      self.to_usi
     end
 
     class Movement
