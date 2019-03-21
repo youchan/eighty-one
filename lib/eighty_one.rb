@@ -1,4 +1,4 @@
-require_relative "eighty_one/version"
+require_relative "eighty-one/version"
 
 module EightyOne
   class CantGetMovement < RuntimeError; end
@@ -13,6 +13,6 @@ module EightyOne
   end
 end
 
-require_relative 'eighty_one/face'
-require_relative 'eighty_one/piece'
-require_relative 'eighty_one/board'
+require_relative 'eighty-one/face'
+require_relative 'eighty-one/piece'
+require_relative 'eighty-one/board'
